@@ -1,0 +1,140 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
+
+namespace Prj2Client
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int shard;
+            int port = 0;
+            bool answer = false;
+            string line = string.Empty;
+            byte[] inputBytes;
+            byte[] hash;
+            MD5 md5;
+            
+            StringBuilder wrong_words = new StringBuilder();           
+            Dictionary<string, bool> wordsDict = new Dictionary<string, bool>();
+            List<string> S0List = new List<string>();
+            List<string> S1List = new List<string>();
+
+            Console.WriteLine("---------------Client Implementation-------------------");
+            Console.WriteLine("Enter path to S0 Servers");
+            string S0Adresses = Console.ReadLine();
+
+            Console.WriteLine("Enter path to S1 Servers");
+            string S1Adresses = Console.ReadLine();
+
+            Console.WriteLine("Enter text search incorrect words");
+            string wordsText = Console.ReadLine();
+
+            List<string> wordsList = wordsText.Split(' ').ToList();
+
+            using (StreamReader sr = new StreamReader(S0Adresses))
+            {
+                while ((line = sr.ReadLine()) != null)
+                {
+                    S0List.Add(line);
+                }
+            }
+
+            using (StreamReader sr = new StreamReader(S1Adresses))
+            {
+                while ((line = sr.ReadLine()) != null)
+                {
+                    S1List.Add(line);
+                }
+            }
+
+            S0List = shuffleArray(S0List);
+            S1List = shuffleArray(S1List);          
+
+            foreach (string word in wordsList)
+            {
+                md5 = System.Security.Cryptography.MD5.Create();
+                inputBytes = System.Text.Encoding.ASCII.GetBytes(RemoveSpecialCharacters(word));
+                hash = md5.ComputeHash(inputBytes);
+
+                shard = hash[15] % 2;
+
+                if (shard == 0)
+                {
+                    foreach (string serverName in S0List)
+                    {
+                        if (serverName != null)
+                        {
+                            port = Convert.ToInt32(serverName.Split(' ')[1]);
+
+                            answer = client.spellCheck(word);
+
+                            wordsDict.Add(word, answer);
+
+                            
+                        }
+                    }
+                }
+
+                else if (shard == 1)
+                {
+                    foreach (string serverName in S1List)
+                    {
+                        if (serverName != null)
+                        {
+                            port = Convert.ToInt32(serverName.Split(' ')[1]);
+                           
+                            answer = client.spellCheck(wordsArray0);
+
+                            wordsDict.Add(word, answer);
+                        }
+                    }
+                }
+            }
+
+            foreach (string wrongWord in wordsDict.Keys)
+            {
+                if (!wordsDict[wrongWord])
+                {
+                    wrong_words.Append(wrongWord + " ");
+                }
+            }
+            
+            if (wrong_words.Length == 0)
+                Console.WriteLine("No misspelled words");
+            else
+                Console.WriteLine("List of misspelled words" + wrong_words);
+        }
+
+        public static List<string> shuffleArray(List<string> ar)
+        {
+            Random rnd = new Random();
+            for (int i = ar.Count - 1; i > 0; i--)
+            {
+                int index = rnd.Next(i + 1);
+                // Simple swap
+                String a = ar[index];
+                ar[index] = ar[i];
+                ar[i] = a;
+            }
+            return ar;
+        }
+
+        public static string RemoveSpecialCharacters(string str)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (char c in str)
+            {
+                if ((c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z'))
+                {
+                    sb.Append(c);
+                }
+            }
+            return sb.ToString();
+        }
+    }
+}
