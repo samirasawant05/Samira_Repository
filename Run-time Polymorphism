@@ -1,0 +1,34 @@
+//Type of Polymorphism also called as run time or dynamic polymorphism
+import java.io.*;
+class BaseOverride
+{
+	public void MethodtoOverride()
+	{
+		System.out.println("Base Class Method");
+	}
+
+}
+
+class ChildOverride extends BaseOverride
+{
+	public void MethodtoOverride()
+	{
+		super.MethodtoOverride(); // invokes method of base class
+		System.out.println("Child class Method");
+	}
+}
+
+class MethodOverridingTest
+{
+	public static void main(String args[]) throws Exception
+	{
+		
+		BaseOverride base = new BaseOverride(); //base class reference and object
+		BaseOverride child = new ChildOverride(); //base class reference and object of child class
+		ChildOverride c = new ChildOverride(); // child class reference and object
+		base.MethodtoOverride();
+		child.MethodtoOverride();
+		c.MethodtoOverride();
+	}
+	
+}
