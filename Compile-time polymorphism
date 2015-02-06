@@ -1,0 +1,29 @@
+//Type of Polymorphism also called as compile time or static polymorphism
+import java.io.*;
+class Overload
+{
+public void Overload()
+{
+	System.out.println("Main Method");
+}
+public void Overload(String name)
+{
+	System.out.println("Overloaded method with return type String.");
+}
+public void Overload(int number)
+{
+	System.out.println("Overloaded method with int parameter");
+}
+}
+class MethodOverloadingTest 
+{
+	public static void main (String args[]) throws Exception
+	{
+		
+		Overload o = new Overload();
+		o.Overload();
+		o.Overload("samira");
+		o.Overload(5);
+		
+	}
+}
