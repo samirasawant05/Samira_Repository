@@ -1,0 +1,50 @@
+import java.io.*;
+class Encapsulation
+{
+private String name;
+private int id;
+
+public String getName()
+{
+	return name;
+}
+public int getId()
+{
+	return id;
+}
+public void setName(String Name)
+{
+	name = Name;
+}
+public void setId(int Id)
+{
+	if (Id < 50)
+	{
+		System.out.println("Invalid ID");
+	}
+	else
+	{
+		id = Id;
+	}
+}
+}
+class EncapsulationTest
+{
+	public static void main (String args[]) throws Exception
+	{
+		String name;
+		int id;
+		BufferedReader in = new BufferedReader(new InputStreamReader (System.in));
+		Encapsulation e = new Encapsulation();
+		System.out.println ("Enter Name:");
+		System.out.println("Enter Id:");
+				name = in.readLine();
+				id = Integer.parseInt(in.readLine());
+		
+		e.setName(name);
+		e.setId(id);
+	}
+}
+		
+		
+	
